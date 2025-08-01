@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Convertir PNG en JPG</title>
+</head>
+<body>
+  <h1>Convertisseur PNG → JPG</h1>
+
+  <input type="file" id="imageInput" accept="image/png"><br><br>
+  <img id="jpgResult" alt="Image JPG" style="max-width: 300px;"><br><br>
+  <button id="convertBtn">Convertir</button>
+  <a id="downloadBtn" style="display:none;" download="image.jpg">Télécharger l'image JPG</a>
+
+  <canvas id="canvas" style="display:none;"></canvas>
+
+  <script>
+    const input = document.getElementById('imageInput');
+    const convertBtn = document.getElementById('convertBtn');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const resultImg = document.getElementById('jpgResult');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    let img = new Image();
+
+    input.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file && file.type === "image/png") {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert("Choisissez une image PNG.");
+      }
+    });
+
+    convertBtn.addEventListener('click', function () {
+      if (!img.src) {
+        alert("Veuillez charger une image PNG d'abord.");
+        return;
+      }
+      img.onload = function () {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.fillStyle = "#ffffff"; // fond blanc
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+        const jpgData = canvas.toDataURL("image/jpeg", 0.95);
+        resultImg.src = jpgData;
+        downloadBtn.href = jpgData;
+        downloadBtn.style.display = 'inline';
+      };
+    });
+  </script>
+</body>
+</html>
